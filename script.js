@@ -28,8 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const gradeEntry = document.createElement('div');
         gradeEntry.className = 'grade-entry';
         gradeEntry.innerHTML = `
-            <input type="number" name="grade" placeholder="Ocena" value="${grade}" required>
-            <input type="number" name="weight" placeholder="Waga" value="${weight}" required>
+            <input type="number" name="grade" placeholder="Ocena" value="${grade}" required inputmode="numeric">
+            <input type="number" name="weight" placeholder="Waga" value="${weight}" required inputmode="numeric">
             <button type="button" class="removeGrade">Usuń</button>
         `;
         form.insertBefore(gradeEntry, addGradeButton);
