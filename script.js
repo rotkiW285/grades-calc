@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('gradesForm');
     const addGradeButton = document.getElementById('addGrade');
     const clearGradesButton = document.getElementById('clearGrades');
+    const saveProfileButton = document.getElementById('saveProfile');
+    const deleteProfileButton = document.getElementById('deleteProfile');
+    const profilesMenu = document.getElementById('profilesMenu');
     const averageDisplay = document.createElement('div');
     averageDisplay.id = 'averageDisplay';
     form.appendChild(averageDisplay);
@@ -16,7 +19,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const gradeEntries = document.querySelectorAll('.grade-entry');
         gradeEntries.forEach(entry => entry.remove());
         localStorage.removeItem('grades');
+        ensureAtLeastOneGradeEntry();
         calculateAndDisplayAverage();
+    });
+
+    saveProfileButton.addEventListener('click', () => {
+        const profileName = prompt('Podaj nazwę profilu:');
+        if (profileName) {
+            saveProfile(profileName);
+            loadProfilesMenu();
+        }
+    });
+
+    deleteProfileButton.addEventListener('click', () => {
+        const selectedProfile = profilesMenu.value;
+        if (selectedProfile) {
+            deleteProfile(selectedProfile);
+            loadProfilesMenu();
+        }
+    });
+
+    profilesMenu.addEventListener('change', () => {
+        const selectedProfile = profilesMenu.value;
+        if (selectedProfile) {
+            loadProfile(selectedProfile);
+        }
     });
 
     form.addEventListener('input', () => {
@@ -37,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gradeEntry.querySelector('.removeGrade').addEventListener('click', () => {
             gradeEntry.remove();
             saveGradesToCache();
+            ensureAtLeastOneGradeEntry();
             calculateAndDisplayAverage();
         });
     }
@@ -58,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         grades.forEach(({ grade, weight }) => {
             addGradeEntry(grade, weight);
         });
+        ensureAtLeastOneGradeEntry();
         calculateAndDisplayAverage();
     }
 
@@ -77,5 +106,47 @@ document.addEventListener('DOMContentLoaded', () => {
         averageDisplay.textContent = `Średnia ważona: ${weightedAverage.toFixed(2)}`;
     }
 
+    function saveProfile(profileName) {
+        const grades = JSON.parse(localStorage.getItem('grades')) || [];
+        const profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+        profiles[profileName] = grades;
+        localStorage.setItem('profiles', JSON.stringify(profiles));
+    }
+
+    function loadProfile(profileName) {
+        const profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+        const grades = profiles[profileName] || [];
+        document.querySelectorAll('.grade-entry').forEach(entry => entry.remove());
+        grades.forEach(({ grade, weight }) => {
+            addGradeEntry(grade, weight);
+        });
+        saveGradesToCache();
+        calculateAndDisplayAverage();
+    }
+
+    function deleteProfile(profileName) {
+        const profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+        delete profiles[profileName];
+        localStorage.setItem('profiles', JSON.stringify(profiles));
+    }
+
+    function loadProfilesMenu() {
+        const profiles = JSON.parse(localStorage.getItem('profiles')) || {};
+        profilesMenu.innerHTML = '<option value="">Wybierz profil</option>';
+        Object.keys(profiles).forEach(profileName => {
+            const option = document.createElement('option');
+            option.value = profileName;
+            option.textContent = profileName;
+            profilesMenu.appendChild(option);
+        });
+    }
+
+    function ensureAtLeastOneGradeEntry() {
+        if (document.querySelectorAll('.grade-entry').length === 0) {
+            addGradeEntry();
+        }
+    }
+
     loadGradesFromCache();
+    loadProfilesMenu();
 });

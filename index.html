@@ -13,10 +13,11 @@
     <meta property="og:title" content="GRADES285">
     <meta property="og:url" content="https://grades.285.ovh">
     <meta property="og:type" content="website">
+    <meta property="og:image" content="https://285.ovh/favicon-letter/apple-touch-icon.png">
     <meta name="og:description" content="Wprowadź swoje oceny i oblicz średnią ważoną!">
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://285.ovh/favicon-letter/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://285.ovh/favicon-letter/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://285.ovh/favicon-letter/favicon-16x16.png">
     <link rel="manifest" href="favicon/site.webmanifest">
 </head>
 <body>
@@ -26,7 +27,18 @@
             <button type="button" id="addGrade">Dodaj ocenę</button>
             <button type="button" id="clearGrades">Wyczyść oceny</button>
         </form>
+        <div class="hamburger-menu">
+            <button id="hamburger-button">Zestawy</button>
+            <div class="hamburger-content">
+                <select id="setsMenu">
+                    <option value="">Wybierz zestaw</option>
+                </select>
+                <button type="button" id="saveset">Zapisz profil</button>
+                <button type="button" id="deleteset">Usuń profil</button>
+            </div>
+        </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
