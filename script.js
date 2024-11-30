@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const gradeEntries = document.querySelectorAll('.grade-entry');
         gradeEntries.forEach(entry => entry.remove());
         localStorage.removeItem('grades');
-        ensureAtLeastOneGradeEntry();
         calculateAndDisplayAverage();
     });
 
@@ -55,8 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const gradeEntry = document.createElement('div');
         gradeEntry.className = 'grade-entry';
         gradeEntry.innerHTML = `
-            <input type="number" name="grade" placeholder="Ocena" value="${grade}" required inputmode="numeric">
-            <input type="number" name="weight" placeholder="Waga" value="${weight}" required inputmode="numeric">
+            <input type="number" name="grade" placeholder="Ocena" value="${grade}" required inputmode="decimal">
+            <input type="number" name="weight" placeholder="Waga" value="${weight}" required inputmode="decimal">
             <button type="button" class="removeGrade">Usuń</button>
         `;
         form.insertBefore(gradeEntry, addGradeButton);
@@ -64,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
         gradeEntry.querySelector('.removeGrade').addEventListener('click', () => {
             gradeEntry.remove();
             saveGradesToCache();
-            ensureAtLeastOneGradeEntry();
             calculateAndDisplayAverage();
         });
     }
@@ -86,7 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
         grades.forEach(({ grade, weight }) => {
             addGradeEntry(grade, weight);
         });
-        ensureAtLeastOneGradeEntry();
         calculateAndDisplayAverage();
     }
 
@@ -139,12 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
             option.textContent = profileName;
             profilesMenu.appendChild(option);
         });
-    }
-
-    function ensureAtLeastOneGradeEntry() {
-        if (document.querySelectorAll('.grade-entry').length === 0) {
-            addGradeEntry();
-        }
     }
 
     loadGradesFromCache();
